@@ -115,7 +115,7 @@ gulp.task('lint', function() {
     .pipe($.eslint())
     .on('error', opts.plumber.errorHandler)
     .pipe($.eslint.format('stylish'))
-    .pipe($.notify(opts.notify.eslint))
+    .pipe($.notify(opts.notify.eslint));
 });
 
 gulp.task('lint:watch', function() {

@@ -18,7 +18,7 @@ module.exports = {
   nodemon: {
     script: 'server.js',
     ignore: [
-      "assets/**/*.js"
+      'assets/**/*.js'
     ],
   },
 
@@ -57,10 +57,10 @@ module.exports = {
         return false;
       }
       var errors = file.eslint.messages.map(function(data) {
-        return "(" + data.line + ':' + data.column + ') ' + data.message;
-      }).join("\n");
+        return '(' + data.line + ':' + data.column + ') ' + data.message;
+      }).join('\n');
 
-      return file.relative + " (" + file.eslint.errorCount + " errors)\n" + errors;
+      return file.relative + ' (' + file.eslint.errorCount + ' errors)\n' + errors;
     }
   }
 };
