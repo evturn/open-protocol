@@ -1,0 +1,47 @@
+{
+  "name": "open-protocol",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Evan Turner",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-eslint": "^4.1.1",
+    "browser-sync": "^2.7.13",
+    "gulp": "^3.9.0",
+    "gulp-autoprefixer": "^2.1.0",
+    "gulp-babel": "^5.2.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-cssmin": "^0.1.6",
+    "gulp-eslint": "^1.0.0",
+    "gulp-less": "^3.0.3",
+    "gulp-load-plugins": "^0.8.0",
+    "gulp-nodemon": "^2.0.3",
+    "gulp-notify": "^2.2.0",
+    "gulp-plumber": "^0.6.6",
+    "gulp-rename": "^1.2.0",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-uglify": "^1.2.0",
+    "gulp-util": "^3.0.6",
+    "lodash": "^3.10.1",
+    "lodash.assign": "^3.2.0",
+    "node-notifier": "^4.2.3",
+    "through2": "^2.0.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.13.3",
+    "connect-flash": "^0.1.1",
+    "express": "^4.13.3",
+    "express-handlebars": "^2.0.1",
+    "lodash": "^3.10.1",
+    "lodash._createwrapper": "^3.0.7",
+    "mongodb": "^2.0.42",
+    "mongoose": "^4.1.5",
+    "morgan": "^1.6.1",
+    "passport": "^0.3.0"
+  }
+}
