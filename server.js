@@ -9,7 +9,8 @@ var express         = require('express'),
     session         = require('express-session'),
     logger          = require('morgan')('dev'),
     mongoose        = require('mongoose'),
-    passport        = require('passport');
+    passport        = require('passport'),
+    LocalStrategy   = require('passport-local').Strategy;
 
 
 //////////////////////
@@ -46,17 +47,58 @@ mongoose.connection.once('open', function callback() {
 // MIDDLEWARE
 //////////////////////
 
+app.use(express.static(__dirname + '/public/dist'));
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(urlencoded);
-app.use(cookieParser());
-app.use(express.static(__dirname + '/public/dist'));
 app.use(logger);
 app.use(flash());
+app.use(session({
+  secret: 'Quentin Vesclovious Cawks',
+  saveUninitialized: false,
+  resave: false
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 
+var User = require('./models/User');
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
+
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    User.findOne({ username: username }, function(err, user) {
+      if (err) { return done(err); }
+      if (!user) {
+        return done(null, false, { message: 'Incorrect username.' });
+      }
+      if (!user.validPassword(password)) {
+        return done(null, false, { message: 'Incorrect password.' });
+      }
+      return done(null, user);
+    });
+  }
+));
+
 app.get('/', function(req, res, next) {
   res.render('index');
+});
+
+app.post('/login',
+  passport.authenticate('local', { successRedirect: '/',
+                                   failureRedirect: '/login',
+                                   failureFlash: true }),
+  function(req, res, next) {
+    console.log(req);
+    res.send('Hey');
 });
 
 app.listen(3000);
