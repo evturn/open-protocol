@@ -152,7 +152,7 @@ app.post('/register',
           return next(err);
         }
 
-        passport.authenticate('local')(req, res, function () {
+        passport.authenticate('local')(req, res, function() {
             res.redirect('connect');
         });
       });
@@ -166,10 +166,12 @@ app.get('/login',
 
 app.post('/login',
   passport.authenticate('local', {
-    successRedirect: '/',
     failureRedirect: '/login',
-    failureFlash: 'No.'
-  }));
+    message: 'No.'
+  }),
+  function(req, res, next) {
+    res.redirect('/');
+  });
 
 app.get('/logout',
   function(req, res, next) {
