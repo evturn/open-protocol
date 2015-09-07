@@ -10,34 +10,36 @@ var express         = require('express'),
     logger          = require('morgan')('dev'),
     mongoose        = require('mongoose'),
     passport        = require('passport'),
-    LocalStrategy   = require('passport-local').Strategy;
+    LocalStrategy   = require('passport-local').Strategy,
+    jwt             = require('jsonwebtoken');
 
 
 //////////////////////
-// HANDLEBARS
+// INIT
 //////////////////////
 
-hbs = handlebars.create({
-  layoutsDir    : 'views/layouts',
-  partialsDir   : 'views/partials',
-  defaultLayout : 'default',
-  helpers       : new require('./views/helpers')(),
-  extname       : '.hbs'
-}).engine;
+var init = {
+  engine    :   handlebars.create({
+                  layoutsDir    : 'views/layouts',
+                  partialsDir   : 'views/partials',
+                  defaultLayout : 'default',
+                  helpers       : new require('./views/helpers')(),
+                  extname       : '.hbs'
+                }).engine,
+  database  :  'mongodb://localhost/open-protocol',
+  static    :  __dirname + '/public/dist',
+  secret    :  'Quentin Vesclovious Cawks'
+};
 
 app.set('view engine', 'hbs');
 app.set('views', 'views');
-app.engine('hbs', hbs);
+app.engine('hbs', init.engine);
 
 //////////////////////
 // MONGOOSE
 //////////////////////
 
-mongoose.connect('mongodb://localhost/open-protocol', function(err) {
-  if (err) {
-    console.log('Ensure you\'re connected');
-  }
-});
+mongoose.connect(init.database);
 mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
 mongoose.connection.once('open', function callback() {
   console.log('DB connected');
@@ -48,20 +50,23 @@ mongoose.connection.once('open', function callback() {
 //////////////////////
 var User = require('./models/User');
 
-app.use(express.static(__dirname + '/public/dist'));
+app.use(express.static(init.static));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(urlencoded);
 app.use(logger);
 app.use(flash());
 app.use(session({
-  secret: 'Quentin Vesclovious Cawks',
+  secret: init.secret,
   saveUninitialized: false,
   resave: false
 }));
 app.use(passport.initialize());
 app.use(passport.session());
 
+//////////////////////
+// PASSPORT
+//////////////////////
 
 passport.serializeUser(function(user, done) {
   done(null, user.id);
@@ -97,8 +102,10 @@ app.get('/',
     console.log('===========');
     console.log(req.user);
     console.log('===========');
-    res.render('app', {user: req.user});
-});
+    res.render('app', {
+      user: req.user
+    });
+  });
 
 app.get('/register',
   function(req, res, next) {
@@ -106,54 +113,59 @@ app.get('/register',
     console.log(req.user);
     console.log('===========');
     res.render('index');
-});
+  });
 
 app.post('/register',
   function(req, res, next) {
-  var user = new User();
+    var user = new User();
 
-  user.username = req.body.username;
-  user.password = req.body.password;
+    user.username = req.body.username;
+    user.password = req.body.password;
 
-  user.save(function(err, user) {
-    if (err) {
-      return res.render('index', {message: 'Username taken.'});
-    }
-
-    req.login(user, function(err) {
+    user.save(function(err, user) {
       if (err) {
-        return next(err);
+        return res.render('index', {
+          message: 'Username taken.'
+        });
       }
-      return res.redirect('/login');
+
+      req.login(user, function(err) {
+        if (err) {
+          return next(err);
+        }
+
+        return res.redirect('/login');
+      });
     });
   });
-});
 
 app.get('/login',
   function(req, res, next) {
     res.render('login');
-});
+  });
 
 app.post('/login',
   passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/login',
     failureFlash: 'No.'
-}));
+  }));
 
 app.get('/logout',
   function(req, res, next) {
     req.logout();
     res.redirect('register');
-});
+  });
 
 app.get('/connect',
   function(req, res, next) {
     console.log('===========');
     console.log(req.user);
     console.log('===========');
-    res.render('connect', {user: req.user});
-});
+    res.render('connect', {
+      user: req.user
+    });
+  });
 
 
 
