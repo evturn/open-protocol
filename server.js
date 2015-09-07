@@ -54,4 +54,9 @@ app.use(logger);
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.get('/', function(req, res, next) {
+  res.render('index');
+});
+
 app.listen(3000);
