@@ -1,36 +1,37 @@
-var express         = require('express'),
-    app             = express(),
-    handlebars      = require('express-handlebars'),
-    connect         = require('connect'),
-    flash           = require('connect-flash'),
-    bodyParser      = require('body-parser'),
-    urlencoded      = bodyParser.urlencoded({extended: false}),
-    cookieParser    = require('cookie-parser'),
-    session         = require('express-session'),
-    logger          = require('morgan')('dev'),
-    mongoose        = require('mongoose'),
-    passport        = require('passport'),
-    LocalStrategy   = require('passport-local').Strategy;
+var express          = require('express'),
+    app              = express(),
+    handlebars       = require('express-handlebars'),
+    connect          = require('connect'),
+    flash            = require('connect-flash'),
+    bodyParser       = require('body-parser'),
+    urlencoded       = bodyParser.urlencoded({extended: false}),
+    cookieParser     = require('cookie-parser'),
+    session          = require('express-session'),
+    logger           = require('morgan')('dev'),
+    mongoose         = require('mongoose'),
+    passport         = require('passport');
 
 //////////////////////
 // INIT
 //////////////////////
 
 var init = {
-  engine    :   handlebars.create({
-                  layoutsDir    : 'views/layouts',
-                  partialsDir   : 'views/partials',
-                  defaultLayout : 'default',
-                  helpers       : new require('./views/helpers')(),
-                  extname       : '.hbs'
-                }).engine,
-  database  :  'mongodb://localhost/open-protocol',
-  static    :  __dirname + '/public/dist',
-  secret    :  'Quentin Vesclovious Cawks'
+  'engine'   :   handlebars.create({
+                    layoutsDir    : 'views/layouts',
+                    partialsDir   : 'views/partials',
+                    defaultLayout : 'default',
+                    helpers       : new require('./views/helpers')(),
+                    extname       : '.hbs'
+                  }).engine,
+  'static'   :  __dirname + '/public/dist',
+  'views'    :  'views',
+
+  'secret'   :  'Quentin Vesclovious Cawks',
+  'database' :  'mongodb://localhost/open-protocol'
 };
 
 app.set('view engine', 'hbs');
-app.set('views', 'views');
+app.set(init.views);
 app.engine('hbs', init.engine);
 
 //////////////////////
@@ -38,10 +39,13 @@ app.engine('hbs', init.engine);
 //////////////////////
 
 mongoose.connect(init.database);
-mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
-mongoose.connection.once('open', function callback() {
-  console.log('DB connected');
-});
+mongoose.connection.on('error',
+  console.error.bind(console,
+    'connection error:'));
+mongoose.connection.once('open',
+  function callback() {
+    console.log('DB connected');
+  });
 
 //////////////////////
 // MIDDLEWARE
@@ -75,6 +79,15 @@ passport.deserializeUser(function(id, done) {
     done(err, user);
   });
 });
+
+//////////////////////
+// LOCAL
+//////////////////////
+
+var LocalStrategy    = require('passport-local').Strategy;
+var credentials      = require('./config/credentials'),
+    FacebookStrategy = require('passport-facebook'),
+    TwitterStrategy  = require('passport-twitter').Strategy;
 
 passport.use(new LocalStrategy(function(username, password, done) {
   User.findOne({
@@ -126,8 +139,8 @@ var secure = function(req, res, next) {
 app.get('/',
   secure,
   function(req, res, next) {
-    console.log('===========');
-    console.log(req);
+    console.log('===SECURE==');
+    console.log(req.user);
     console.log('===========');
     res.render('app', {
       user: req.user
@@ -170,9 +183,6 @@ app.post('/register',
 
 app.get('/login',
   function(req, res, next) {
-    console.log('===========');
-    console.log(req);
-    console.log('===========');
     res.render('login');
   });
 
@@ -194,16 +204,74 @@ app.get('/logout',
 app.get('/connect',
   secure,
   function(req, res, next) {
-    console.log('===========');
-    console.log(req.user);
-    console.log('===========');
     res.render('connect', {
       user: req.user
     });
   });
 
 //////////////////////
-// CONNECT
+// FACEBOOK
+//////////////////////
+
+passport.use(new FacebookStrategy(credentials.facebook,
+  function(accessToken, refreshToken, profile, done) {
+    User.findOne({
+      'facebook.id': profile.id
+    },
+    function(err, user) {
+      if (err) {
+        console.log('====error====');
+        console.log(err);
+        console.log('===========');
+        return done(null, false, err);
+      }
+
+      if (user) {
+        console.log('======user==');
+        console.log(user);
+        console.log('===========');
+        return done(null, user);
+      }
+    });
+
+    console.log('===========');
+    console.log('===profile=');
+    console.log(profile);
+    console.log('===========');
+    console.log('===========');
+
+  return done(null, profile);
+  }
+));
+
+app.get('/auth/facebook',
+  passport.authenticate('facebook'));
+
+app.get('/auth/facebook/callback',
+  urlencoded,
+  function(req, res, next) {
+    passport.authenticate('facebook', {
+      failureRedirect: '/register'
+    },
+    function(err, user, info) {
+      if (err) {
+        return next(err);
+      }
+
+      if (user) {
+        console.log('jfdslak;fdsakl', user);
+        return next(user);
+      }
+
+      if (user && req.user) {
+        console.log('DFHJSKAFDSJAF;FJKSLA;FJDKSLA;FJDSLA;');
+      }
+
+    })(req, res, next);
+});
+
+//////////////////////
+// TWITTER
 //////////////////////
 
 
