@@ -2,7 +2,7 @@
   <div class="inner">
     <div class="login-container">
       <div class="header-container">
-        <p class="header-text">Welcome.</p>
+        <p class="header-text">Welcome. {{user.username}}</p>
       </div>
       <div class="form-container">
         <form class="register-form" action="/register" method="POST">
@@ -14,7 +14,7 @@
             <span class="reg-icon error"><i class="fa fa-times"></i></span>
             <span class="reg-icon taken"><i class="fa fa-lock"></i></span>
             <span class="reg-icon available"><i class="fa fa-unlock"></i></span>
-            <p class="reg-message"><a href="/logout">{{user.username}}</a></p>
+            <p class="reg-message"><a href="/logout">Sign out, {{user.username}}</a></p>
             <p class="reg-message">{{message}}</p>
           </div>
         </form>
