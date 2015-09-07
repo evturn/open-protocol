@@ -4,22 +4,23 @@
       <div class="header-container">
         <p class="header-text">Connect.</p>
       </div>
-      <div class="form-container">
-        <form class="register-form" action="/login" method="POST">
-          <input type="text" class="reg-un" name="username" placeholder="Username">
-          <input type="password" class="reg-pw-1" name="password" placeholder="Password">
-          <input type="submit" value="Log In">
-          <div class="reg-notify">
-            <span class="reg-icon ready"><i class="fa fa-check"></i></span>
-            <span class="reg-icon error"><i class="fa fa-times"></i></span>
-            <span class="reg-icon taken"><i class="fa fa-lock"></i></span>
-            <span class="reg-icon available"><i class="fa fa-unlock"></i></span>
-            <p class="reg-message">Connect accounts</p>
-            <p class="reg-message">{{user.username}}</p>
-            <p class="reg-message">{{message}}</p>
-
-          </div>
-        </form>
+        <div class="btn-container">
+          <a href="/auth/facebook">
+            <div class="facebook-container">
+              <p class="lead">Login with facebook</p>
+              <i class="fa fa-facebook"></i>
+            </div>
+          </a>
+          <a href="/auth/twitter">
+            <div class="twitter-container">
+              <p class="lead">Login with twitter</p>
+              <i class="fa fa-twitter"></i>
+            </div>
+          </a>
+        </div>
+        <p class="reg-message"><a href="/">Maybe later.</a></p>
+        <p class="reg-message">{{user.username}}</p>
+        <p class="reg-message">{{message}}</p>
       </div>
     </div>
   </div>
