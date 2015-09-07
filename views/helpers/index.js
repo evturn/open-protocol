@@ -31,11 +31,11 @@ module.exports = function() {
     for (var i = 0; i < messages.length; i++) {
 
       if (messages[i].title) {
-        output += '<h4>' + messages[i].title + '</h4>';
+        output += '<p class="reg-message">' + messages[i].title + '</p>';
       }
 
       if (messages[i].detail) {
-        output += '<p>' + messages[i].detail + '</p>';
+        output += '<p class="reg-message">' + messages[i].detail + '</p>';
       }
 
       if (messages[i].list) {

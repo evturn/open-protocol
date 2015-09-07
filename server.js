@@ -55,12 +55,12 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(urlencoded);
 app.use(logger);
-app.use(flash());
 app.use(session({
   secret: init.secret,
   saveUninitialized: false,
   resave: false
 }));
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -111,11 +111,21 @@ passport.use(new LocalStrategy(function(username, password, done) {
   });
 }));
 
+var secure = function(req, res, next) {
+  if (!req.user) {
+    req.flash('error', 'Log in immediately!');
+    res.redirect('/login');
+  } else {
+    next();
+  }
+};
+
 //////////////////////
 // ROUTES
 //////////////////////
 
 app.get('/',
+  secure,
   function(req, res, next) {
     console.log('===========');
     console.log(req);
@@ -161,13 +171,17 @@ app.post('/register',
 
 app.get('/login',
   function(req, res, next) {
+    console.log('===========');
+    console.log(req);
+    console.log('===========');
     res.render('login');
   });
 
 app.post('/login',
   passport.authenticate('local', {
     failureRedirect: '/login',
-    message: 'No.'
+    failureFlash: true,
+    successFlash: 'Hey'
   }),
   function(req, res, next) {
     res.redirect('/');
@@ -180,6 +194,7 @@ app.get('/logout',
   });
 
 app.get('/connect',
+  secure,
   function(req, res, next) {
     console.log('===========');
     console.log(req.user);
