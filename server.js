@@ -88,17 +88,29 @@ passport.use(new LocalStrategy(function(username, password, done) {
   });
 }));
 
-app.get('/', function(req, res, next) {
-  console.log('===========');
-  console.log('===========');
-  console.log(req.user);
-  console.log('===========');
-  console.log('===========');
-  res.render('index', {user: req.user});
+//////////////////////
+// ROUTES
+//////////////////////
+
+app.get('/',
+  passport.authenticate('local'),
+  function(req, res,next) {
+    console.log('===========');
+    console.log(req.user);
+    console.log('===========');
+    res.render('app', {user: req.user});
 });
 
+app.get('/register',
+  function(req, res, next) {
+    console.log('===========');
+    console.log(req.user);
+    console.log('===========');
+    res.render('index');
+});
 
-app.post('/register', function(req, res, next) {
+app.post('/register',
+  function(req, res, next) {
   var user = new User();
 
   user.username = req.body.username;
@@ -108,29 +120,40 @@ app.post('/register', function(req, res, next) {
     if (err) {
       return next(err);
     }
+
     req.login(user, function(err) {
       if (err) {
         return next(err);
       }
-      return res.redirect('/');
+      return res.redirect('/login');
     });
   });
 });
 
-
-app.get('/login', function(req, res, next) {
-  res.render('login');
+app.get('/login',
+  function(req, res, next) {
+    res.render('login');
 });
 
 app.post('/login',
-  passport.authenticate('local', { successRedirect: '/',
-                                   failureRedirect: '/login',
-                                   failureFlash: true })
-);
+  passport.authenticate('local', {
+    successRedirect: '/connect',
+    failureRedirect: '/login',
+    failureFlash: true
+}));
 
-app.get('/logout', function(req, res, next) {
-  req.logout();
-  res.redirect('/');
+app.get('/logout',
+  function(req, res, next) {
+    req.logout();
+    res.redirect('/register');
+});
+
+app.get('/connect',
+  function(req, res, next) {
+    console.log('===========');
+    console.log(req.user);
+    console.log('===========');
+    res.render('connect', {user: req.user});
 });
 
 
