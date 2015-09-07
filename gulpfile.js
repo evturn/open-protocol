@@ -81,29 +81,6 @@ gulp.task('js:vendor', function() {
     .pipe(gulp.dest(paths.dest.js));
 });
 
-gulp.task('js:auth', function() {
-  return gulp.src(paths.js.auth.src)
-    .pipe($.plumber(opts.plumber))
-    .pipe($.sourcemaps.init())
-    .pipe($.babel())
-    .on('error', opts.plumber.errorHandler)
-    .pipe($.concat(paths.js.auth.filename))
-    .pipe(gulp.dest(paths.dest.js))
-    .pipe($.uglify())
-    .pipe($.rename(paths.js.auth.min))
-    .pipe(gulp.dest(paths.dest.js))
-    .pipe($.sourcemaps.write('.'))
-    .on('error', gutil.log);
-});
-
-gulp.task('js:auth:watch', function() {
-  gulp.watch(paths.js.watch, ['js:auth:reload']);
-});
-
-gulp.task('js:auth:reload', ['js:auth'], function() {
-    browserSync.reload();
-});
-
 //////////////////////
 // LINT
 //////////////////////

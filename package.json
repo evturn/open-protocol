@@ -37,11 +37,14 @@
     "connect-flash": "^0.1.1",
     "express": "^4.13.3",
     "express-handlebars": "^2.0.1",
+    "handlebars": "^4.0.2",
     "lodash": "^3.10.1",
     "lodash._createwrapper": "^3.0.7",
+    "moment": "^2.10.6",
     "mongodb": "^2.0.42",
     "mongoose": "^4.1.5",
     "morgan": "^1.6.1",
-    "passport": "^0.3.0"
+    "passport": "^0.3.0",
+    "underscore": "^1.8.3"
   }
 }
