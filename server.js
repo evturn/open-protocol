@@ -10,9 +10,7 @@ var express         = require('express'),
     logger          = require('morgan')('dev'),
     mongoose        = require('mongoose'),
     passport        = require('passport'),
-    LocalStrategy   = require('passport-local').Strategy,
-    jwt             = require('jsonwebtoken');
-
+    LocalStrategy   = require('passport-local').Strategy;
 
 //////////////////////
 // INIT
@@ -115,7 +113,8 @@ var secure = function(req, res, next) {
   if (!req.user) {
     req.flash('error', 'Log in immediately!');
     res.redirect('/login');
-  } else {
+  }
+  else {
     next();
   }
 };
@@ -181,7 +180,6 @@ app.post('/login',
   passport.authenticate('local', {
     failureRedirect: '/login',
     failureFlash: true,
-    successFlash: 'Hey'
   }),
   function(req, res, next) {
     res.redirect('/');
@@ -204,6 +202,9 @@ app.get('/connect',
     });
   });
 
+//////////////////////
+// CONNECT
+//////////////////////
 
 
 app.listen(3000);
