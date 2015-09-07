@@ -78,8 +78,8 @@ passport.use(new LocalStrategy(function(username, password, done) {
     if (err) { return done(err); }
     if (!user) { return done(null, false, { message: 'Unknown user ' + username }); }
     user.comparePassword(password, function(err, isMatch) {
-      if (err) return done(err);
-      if(isMatch) {
+      if (err) { return done(err); }
+      if (isMatch) {
         return done(null, user);
       } else {
         return done(null, false, { message: 'Invalid password' });
@@ -97,11 +97,6 @@ app.get('/', function(req, res, next) {
   res.render('index', {user: req.user});
 });
 
-app.post('/login',
-  passport.authenticate('local', { successRedirect: '/',
-                                   failureRedirect: '/login',
-                                   failureFlash: true })
-);
 
 app.post('/register', function(req, res, next) {
   var user = new User();
@@ -114,10 +109,28 @@ app.post('/register', function(req, res, next) {
       return next(err);
     }
     req.login(user, function(err) {
-      if (err) { return next(err); }
+      if (err) {
+        return next(err);
+      }
       return res.redirect('/');
     });
   });
+});
+
+
+app.get('/login', function(req, res, next) {
+  res.render('login');
+});
+
+app.post('/login',
+  passport.authenticate('local', { successRedirect: '/',
+                                   failureRedirect: '/login',
+                                   failureFlash: true })
+);
+
+app.get('/logout', function(req, res, next) {
+  req.logout();
+  res.redirect('/');
 });
 
 

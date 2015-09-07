@@ -3,10 +3,10 @@
 
     <div class="login-container">
       <div class="header-container">
-        <p class="header-text">Register.</p>
+        <p class="header-text">Log in.</p>
       </div>
       <div class="form-container">
-        <form class="register-form" action="/register" method="POST">
+        <form class="register-form" action="/login" method="POST">
           <input type="text" class="reg-un" name="username" placeholder="Username">
           <input type="password" class="reg-pw-1" name="password" placeholder="Password">
           <input type="submit" value="Log In">
@@ -15,7 +15,7 @@
             <span class="reg-icon error"><i class="fa fa-times"></i></span>
             <span class="reg-icon taken"><i class="fa fa-lock"></i></span>
             <span class="reg-icon available"><i class="fa fa-unlock"></i></span>
-            <p class="reg-message"><a href="/logout">{{user.username}}</a></p>
+            <p class="reg-message">{{user.username}}</p>
           </div>
         </form>
       </div>
