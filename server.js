@@ -93,8 +93,7 @@ passport.use(new LocalStrategy(function(username, password, done) {
 //////////////////////
 
 app.get('/',
-  passport.authenticate('local'),
-  function(req, res,next) {
+  function(req, res, next) {
     console.log('===========');
     console.log(req.user);
     console.log('===========');
@@ -118,7 +117,7 @@ app.post('/register',
 
   user.save(function(err, user) {
     if (err) {
-      return next(err);
+      return res.render('index', {message: 'Username taken.'});
     }
 
     req.login(user, function(err) {
@@ -137,15 +136,15 @@ app.get('/login',
 
 app.post('/login',
   passport.authenticate('local', {
-    successRedirect: '/connect',
+    successRedirect: '/',
     failureRedirect: '/login',
-    failureFlash: true
+    failureFlash: 'No.'
 }));
 
 app.get('/logout',
   function(req, res, next) {
     req.logout();
-    res.redirect('/register');
+    res.redirect('register');
 });
 
 app.get('/connect',
