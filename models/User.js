@@ -4,6 +4,8 @@ var LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose'),
     bcrypt   = require('bcrypt');
 
+var passportLocalMongoose = require('passport-local-mongoose');
+
 var note = new mongoose.Schema({
     list         : {type : String},
     created      : {type : Date,    default: new Date()},
@@ -49,11 +51,6 @@ var user = new mongoose.Schema({
 
 user.pre('save', function(next) {
   var user = this;
-  console.log('--------------');
-  console.log('--------------');
-  console.log(user);
-  console.log('--------------');
-  console.log('--------------');
   bcrypt.genSalt(10, function(err, salt) {
     if (err) {
       return next(err);
@@ -76,6 +73,9 @@ user.methods.comparePassword = function(candidatePassword, cb) {
     cb(null, isMatch);
   });
 };
+
+
+user.plugin(passportLocalMongoose);
 
 
 module.exports = mongoose.model('User', user);

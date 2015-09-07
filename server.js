@@ -73,32 +73,33 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-    User.findOne({ username: username }, function(err, user) {
-      if (err) { return done(err); }
-      if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
+passport.use(new LocalStrategy(function(username, password, done) {
+  User.findOne({ username: username }, function(err, user) {
+    if (err) { return done(err); }
+    if (!user) { return done(null, false, { message: 'Unknown user ' + username }); }
+    user.comparePassword(password, function(err, isMatch) {
+      if (err) return done(err);
+      if(isMatch) {
+        return done(null, user);
+      } else {
+        return done(null, false, { message: 'Invalid password' });
       }
-      if (!user.validPassword(password)) {
-        return done(null, false, { message: 'Incorrect password.' });
-      }
-      return done(null, user);
     });
-  }
-));
+  });
+}));
 
 app.get('/', function(req, res, next) {
-  res.render('index');
+  console.log('===========');
+  console.log('===========');
+  console.log(req.user);
+  console.log('===========');
+  console.log('===========');
+  res.render('index', {user: req.user});
 });
 
-app.get('/failure', function(req, res, next) {
-  res.render('index');
-});
-
-app.get('/login',
+app.post('/login',
   passport.authenticate('local', { successRedirect: '/',
-                                   failureRedirect: '/failure',
+                                   failureRedirect: '/login',
                                    failureFlash: true })
 );
 
@@ -108,13 +109,14 @@ app.post('/register', function(req, res, next) {
   user.username = req.body.username;
   user.password = req.body.password;
 
-
   user.save(function(err, user) {
     if (err) {
       return next(err);
     }
-    console.log(user);
-    res.redirect('/login');
+    req.login(user, function(err) {
+      if (err) { return next(err); }
+      return res.redirect('/');
+    });
   });
 });
 
