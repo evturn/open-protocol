@@ -46,6 +46,7 @@ mongoose.connection.once('open', function callback() {
 //////////////////////
 // MIDDLEWARE
 //////////////////////
+var User = require('./models/User');
 
 app.use(express.static(__dirname + '/public/dist'));
 app.use(cookieParser());
@@ -61,7 +62,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-var User = require('./models/User');
 
 passport.serializeUser(function(user, done) {
   done(null, user.id);
@@ -92,13 +92,32 @@ app.get('/', function(req, res, next) {
   res.render('index');
 });
 
-app.post('/login',
-  passport.authenticate('local', { successRedirect: '/',
-                                   failureRedirect: '/login',
-                                   failureFlash: true }),
-  function(req, res, next) {
-    console.log(req);
-    res.send('Hey');
+app.get('/failure', function(req, res, next) {
+  res.render('index');
 });
+
+app.get('/login',
+  passport.authenticate('local', { successRedirect: '/',
+                                   failureRedirect: '/failure',
+                                   failureFlash: true })
+);
+
+app.post('/register', function(req, res, next) {
+  var user = new User();
+
+  user.username = req.body.username;
+  user.password = req.body.password;
+
+
+  user.save(function(err, user) {
+    if (err) {
+      return next(err);
+    }
+    console.log(user);
+    res.redirect('/login');
+  });
+});
+
+
 
 app.listen(3000);

@@ -6,16 +6,16 @@
         <p class="header-text">Hello.</p>
       </div>
       <div class="form-container">
-        <form class="register-form" action="/login" method="post">
+        <form class="register-form" action="/register" method="POST">
           <input type="text" class="reg-un" name="username" placeholder="Username">
           <input type="password" class="reg-pw-1" name="password" placeholder="Password">
-          <input type="submit">
+          <input type="submit" value="Log In">
           <div class="reg-notify">
             <span class="reg-icon ready"><i class="fa fa-check"></i></span>
             <span class="reg-icon error"><i class="fa fa-times"></i></span>
             <span class="reg-icon taken"><i class="fa fa-lock"></i></span>
             <span class="reg-icon available"><i class="fa fa-unlock"></i></span>
-            <p class="reg-message"></p>
+            <p class="reg-message">{{message}}</p>
           </div>
         </form>
       </div>

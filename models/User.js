@@ -1,3 +1,6 @@
+var express = require('express');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose'),
     bcrypt   = require('bcrypt');
 
@@ -46,9 +49,11 @@ var user = new mongoose.Schema({
 
 user.pre('save', function(next) {
   var user = this;
-  if (!user.isModified('password')) {
-    return next();
-  }
+  console.log('--------------');
+  console.log('--------------');
+  console.log(user);
+  console.log('--------------');
+  console.log('--------------');
   bcrypt.genSalt(10, function(err, salt) {
     if (err) {
       return next(err);
@@ -58,7 +63,7 @@ user.pre('save', function(next) {
         return next(err);
       }
       user.password = hash;
-      next();
+      next(user);
     });
   });
 });
@@ -72,6 +77,5 @@ user.methods.comparePassword = function(candidatePassword, cb) {
   });
 };
 
+
 module.exports = mongoose.model('User', user);
-module.exports = mongoose.model('List', list);
-module.exports = mongoose.model('Note', note);
