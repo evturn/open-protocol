@@ -8,7 +8,7 @@ var gulp = require('gulp'),
     through = require('through2'),
     lodash = require('lodash._createwrapper');
 
-gulp.task('default', ['less:watch', 'js:watch', 'js:auth:watch', 'lint:watch', 'sync']);
+gulp.task('default', ['less:watch', 'js:watch', 'lint:watch', 'sync']);
 
 //////////////////////
 // BROWSERSYNC

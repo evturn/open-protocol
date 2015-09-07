@@ -4745,3 +4745,143 @@ li {
   margin-bottom: 0;
   font-size: 18px;
 }
+.form-container {
+  max-width: 400px;
+  text-align: center;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 26px;
+}
+.form-container .flash-message {
+  font-size: 12px;
+  color: #174e7a;
+}
+.form-container .auth-entry {
+  display: none;
+  text-decoration: none;
+  color: #00b2e2;
+  text-transform: uppercase;
+  font-size: 20px;
+}
+.form-container .auth-entry.on {
+  display: block;
+}
+.form-container .message-container.on {
+  margin-top: 30%;
+}
+.form-container .nav-avatar {
+  margin-top: 20px;
+  border-radius: 50%;
+}
+.form-container .auth.btn-container {
+  position: relative;
+  overflow: auto;
+  outline: none;
+  margin-top: 0;
+}
+.form-container .auth.btn-container .fa {
+  display: inline-block;
+  float: right;
+  color: #d4e7ea;
+  cursor: default;
+  font-size: 2em;
+  -webkit-transition: 0.3s;
+  -o-transition: 0.3s;
+  transition: 0.3s;
+}
+.form-container .auth.btn-container .fa.ready {
+  color: #00b2e2;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+}
+.form-container .auth.btn-container .caption {
+  color: #00b2e2;
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 9px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  top: 20px;
+  z-index: 2;
+  outline: none;
+  cursor: default;
+}
+.form-container .auth.btn-container .caption,
+.form-container .auth.btn-container .caption:before,
+.form-container .auth.btn-container .caption:after {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.form-container .auth.btn-container .caption a {
+  cursor: pointer;
+}
+.form-container .log-notify,
+.form-container .reg-notify {
+  height: 35px;
+}
+.form-container .log-notify .ready,
+.form-container .reg-notify .ready {
+  display: none;
+  color: #00cfff;
+}
+.form-container .log-notify .error,
+.form-container .reg-notify .error {
+  display: none;
+  color: #c42f33;
+}
+.form-container .log-notify .taken,
+.form-container .reg-notify .taken {
+  display: none;
+  color: #c42f33;
+}
+.form-container .log-notify .available,
+.form-container .reg-notify .available {
+  display: none;
+  color: #00cfff;
+}
+.form-container .log-message,
+.form-container .reg-message {
+  text-align: center;
+  color: #174e7a;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+.form-container .header-text {
+  text-align: left;
+  font-size: 16px;
+  margin-bottom: 15px;
+  -webkit-animation-duration: 2s;
+  animation-duration: 2s;
+}
+@media (min-width: 600px) {
+  .form-container .header-text {
+    font-size: 20px;
+  }
+}
+.form-container .meta {
+  text-align: center;
+  font-size: 10px;
+}
+.form-container input {
+  display: block;
+  height: 30px;
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  border: none;
+  border-bottom: 1px solid #d4e7ea;
+  outline: none;
+  font-size: 18px;
+}
+.form-container .log-submit .fa {
+  color: #00b2e2;
+  cursor: pointer;
+}
