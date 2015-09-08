@@ -4870,6 +4870,9 @@ a {
   letter-spacing: -4px;
   font-size: 36px;
 }
+.connect-avatar {
+  border-radius: 50%;
+}
 a .lead {
   text-transform: uppercase;
   font-size: 14px;

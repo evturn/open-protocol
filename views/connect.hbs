@@ -5,15 +5,23 @@
         <p class="header-text">Connect.</p>
       </div>
         <div class="btn-container">
+          {{#if user.facebook.id}}
+            <div class="facebook-container">
+              <img class="connect-avatar" src="https://graph.facebook.com/{{user.facebook.id}}/picture">
+              <p class="lead">Connected</p>
+              <i class="fa fa-facebook"></i>
+            </div>
+          {{else}}
           <a href="/auth/facebook">
             <div class="facebook-container">
-              <p class="lead">Login with facebook</p>
+              <p class="lead">Activate one-click login</p>
               <i class="fa fa-facebook"></i>
             </div>
           </a>
+          {{/if}}
           <a href="/auth/twitter">
             <div class="twitter-container">
-              <p class="lead">Login with twitter</p>
+              <p class="lead">Activate one-click login</p>
               <i class="fa fa-twitter"></i>
             </div>
           </a>
