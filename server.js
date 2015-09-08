@@ -98,11 +98,20 @@ passport.use(new LocalStrategy(function(username, password, done) {
       return done(err);
     }
 
-    if (!user) {
-      return done(null, false);
-    }
-    else if (user) {
-      return done(null, user);
+    if (user) {
+      user.comparePassword(password,
+        function(err, isMatch) {
+          if (err) {
+            console.log(err);
+          }
+
+          if (isMatch) {
+            return done(null, user);
+          }
+          else {
+            return done(null, false);
+          }
+      });
     }
   });
 }));

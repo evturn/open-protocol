@@ -1,10 +1,13 @@
-<div class="container">
+<div class="container join">
   <div class="inner">
     <div class="login-container">
       <div class="header-container">
-        <p class="header-text">Register.</p>
+        <p class="header-text">Join for free</p>
       </div>
       <div class="form-container">
+        <div class="message-container">
+          <p class="reg-message">This way you'll be able to keep your tasks and lists in sync across all your devices</p>
+        </div>
         <form class="register-form" action="/register" method="POST">
           <input type="text" class="reg-un" name="username" placeholder="Username">
           <input type="password" class="reg-pw-1" name="password" placeholder="Password">
@@ -14,8 +17,7 @@
             <span class="reg-icon error"><i class="fa fa-times"></i></span>
             <span class="reg-icon taken"><i class="fa fa-lock"></i></span>
             <span class="reg-icon available"><i class="fa fa-unlock"></i></span>
-            <p class="reg-message"><a href="/logout">{{user.username}}</a></p>
-            <p class="reg-message"><a href="/login">Login</a></p>
+            <p class="reg-message"><a href="/login">Already a member?</a></p>
             <p class="reg-message">{{message}}</p>
           </div>
         </form>

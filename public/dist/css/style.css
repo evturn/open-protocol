@@ -4953,3 +4953,6 @@ a .lead {
 .login .btn-container {
   margin-top: inherit;
 }
+.join .message-container {
+  margin-bottom: 30px;
+}

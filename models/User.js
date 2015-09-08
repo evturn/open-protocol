@@ -6,7 +6,7 @@ var mongoose = require('mongoose'),
 
 var passportLocalMongoose = require('passport-local-mongoose');
 
-var note = new mongoose.Schema({
+var Note = new mongoose.Schema({
     list         : {type : String},
     created      : {type : Date,    default: new Date()},
     body         : {type : String},
@@ -16,14 +16,14 @@ var note = new mongoose.Schema({
 });
 
 
-var list = new mongoose.Schema({
+var List = new mongoose.Schema({
     name         : {type : String},
     icon         : {type : String,  default: 'fa fa-tasks'},
     created      : {type : Date,    default: new Date()},
-    notes        : [note],
+    notes        : [Note],
 });
 
-var user = new mongoose.Schema({
+var User = new mongoose.Schema({
     email        : {type : String, sparse: true, unique: true},
     password     : {type : String, sparse: true, required: true},
     username     : {type : String, sparse: true, required: true, unique: true},
@@ -46,11 +46,16 @@ var user = new mongoose.Schema({
       location   : {type : String, sparse: true},
       avatar     : {type : String, sparse: true}
     },
-    lists        : [list]
+    lists        : [List]
 });
 
-user.pre('save', function(next) {
+User.pre('save', function(next) {
   var user = this;
+
+  if (!user.isModified('password')) {
+    return next();
+  }
+
   bcrypt.genSalt(10, function(err, salt) {
     if (err) {
       return next(err);
@@ -65,7 +70,7 @@ user.pre('save', function(next) {
   });
 });
 
-user.methods.comparePassword = function(candidatePassword, cb) {
+User.methods.comparePassword = function(candidatePassword, cb) {
   bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
     if (err) {
       return cb(err);
@@ -75,7 +80,7 @@ user.methods.comparePassword = function(candidatePassword, cb) {
 };
 
 
-user.plugin(passportLocalMongoose);
+User.plugin(passportLocalMongoose);
 
 
-module.exports = mongoose.model('User', user);
+module.exports = mongoose.model('User', User);
