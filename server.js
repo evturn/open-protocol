@@ -258,13 +258,28 @@ app.get('/auth/facebook/callback',
         return next(err);
       }
 
-      if (user) {
-        console.log('jfdslak;fdsakl', user);
-        return next(user);
-      }
-
       if (user && req.user) {
-        console.log('DFHJSKAFDSJAF;FJKSLA;FJDKSLA;FJDSLA;');
+        var attr = user._json;
+
+        req.user.facebook = {
+          id        : attr.id,
+          email     : attr.email,
+          name      : attr.name,
+          firstName : attr.first_name,
+          lastName  : attr.last_name,
+          gender    : attr.gender,
+          profile   : attr.link,
+        };
+        console.log('====CREATION====');
+        console.log('====CREATION====');
+        console.log(req.user);
+        console.log('====CREATION====');
+        console.log('====CREATION====');
+        res.redirect('/connect');
+      }
+      else if (user && !req.user) {
+        // User.findOne() { yes => log user in; no => redirect user to register}
+        res.redirect('/register');
       }
 
     })(req, res, next);
