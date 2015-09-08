@@ -221,8 +221,7 @@ passport.use(new FacebookStrategy(credentials.facebook,
       }
     });
 
-  }
-));
+  }));
 
 app.get('/auth/facebook',
   passport.authenticate('facebook'));
@@ -239,18 +238,12 @@ app.get('/auth/facebook/callback',
       }
 
       if (user && user.valid) {
-        console.log('====FACE==');
-        console.log(user);
-        console.log('====FACE==');
         req.login(user,
           function(err) {
             if (err) {
               return next(err);
           }
 
-          console.log('===logIn==');
-          console.log(user);
-          console.log('===logIn==');
           return res.redirect('/');
         });
       }
@@ -285,5 +278,80 @@ app.get('/auth/facebook/callback',
 // TWITTER
 //////////////////////
 
+passport.use(new TwitterStrategy(credentials.twitter,
+  function(accessToken, refreshToken, profile, done) {
+    User.findOne({
+      'twitter.id': profile.id
+    },
+    function(err, user) {
+      if (err) {
+        return done(null, false, err);
+      }
+
+      if (user) {
+        user.valid = true;
+        user.token = accessToken;
+        return done(null, user);
+      }
+      else {
+        profile.token = accessToken;
+        return done(null, profile);
+      }
+    });
+  }));
+
+//////////////////////
+// TWITTER ROUTES
+//////////////////////
+
+app.get('/auth/twitter',
+  passport.authenticate('twitter'));
+
+app.get('/auth/twitter/callback',
+  urlencoded,
+  function(req, res, next) {
+    passport.authenticate('twitter', {
+      failureRedirect: '/register'
+    },
+    function(err, user, info) {
+      if (err) {
+        return next(err);
+      }
+
+      if (user && user.valid) {
+        req.login(user,
+          function(err) {
+            if (err) {
+              return next(err);
+          }
+
+          return res.redirect('/');
+        });
+      }
+      else if (user && req.user) {
+        var attr = user._json;
+
+        req.user.twitter = {
+          id       : attr.id,
+          token    : user.token,
+          username : attr.screen_name,
+          name     : attr.name,
+          avatar   : attr.profile_image_url,
+          location : attr.location
+        };
+
+        req.user.save(function(err, user) {
+          if (err) {
+            console.log(err);
+          }
+
+          return res.redirect('/connect');
+        });
+      }
+      else if (!req.user) {
+        return res.redirect('/register');
+      }
+    })(req, res, next);
+});
 
 app.listen(3000);
