@@ -99,9 +99,7 @@ passport.use(new LocalStrategy(function(username, password, done) {
     }
 
     if (!user) {
-      return done(null, false, {
-        message: 'Unknown user ' + username
-      });
+      return done(null, false);
     }
     else if (user) {
       return done(null, user);
@@ -111,7 +109,6 @@ passport.use(new LocalStrategy(function(username, password, done) {
 
 var secure = function(req, res, next) {
   if (!req.user) {
-    req.flash('error', 'Log in immediately!');
     res.redirect('/login');
   }
   else {
@@ -156,14 +153,16 @@ app.post('/register',
         });
       }
 
-      req.login(user, function(err) {
-        if (err) {
-          return next(err);
-        }
+      req.login(user,
+        function(err) {
+          if (err) {
+            return next(err);
+          }
 
-        passport.authenticate('local')(req, res, function() {
+        passport.authenticate('local')(req, res,
+          function() {
             res.redirect('connect');
-        });
+          });
       });
     });
   });
@@ -189,7 +188,7 @@ app.post('/login',
 app.get('/logout',
   function(req, res, next) {
     req.logout();
-    res.redirect('register');
+    res.redirect('login');
   });
 
 app.get('/connect',

@@ -4950,3 +4950,6 @@ a .lead {
   line-height: 40px;
   float: right;
 }
+.login .btn-container {
+  margin-top: inherit;
+}
