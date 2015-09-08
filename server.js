@@ -270,12 +270,14 @@ app.get('/auth/facebook/callback',
           gender    : attr.gender,
           profile   : attr.link,
         };
-        console.log('====CREATION====');
-        console.log('====CREATION====');
-        console.log(req.user);
-        console.log('====CREATION====');
-        console.log('====CREATION====');
-        res.redirect('/connect');
+
+        req.user.save(function(err, user) {
+          if (err) {
+            console.log(err);
+          }
+
+          res.redirect('/connect');
+        });
       }
       else if (user && !req.user) {
         // User.findOne() { yes => log user in; no => redirect user to register}

@@ -1,4 +1,46 @@
 
+  .facebook-container.connected,
+  .twitter-container.connected {
+    background-color: @primarylighthover;
+
+    .connect-avatar {
+      border-radius: 50%;
+      display: inline-block;
+      float: left;
+      height: 40px;
+      width: 40px;
+    }
+
+    .meta {
+      color: @white;
+      text-transform: uppercase;
+      font-size: 16px;
+      text-align: left;
+      margin-top: 10px;
+      display: inline-block;
+      .margin-x(10px);
+    }
+
+    .fa {
+      display: inline-block;
+    }
+  }
+
+  .message-container {
+    margin-top: 15px;
+  }
+
+  .connect-skip {
+    font-size: 11px;
+    color: @primarydark;
+  }
+
+  .connect-message {
+    font-size: 14px;
+    text-transform: uppercase;
+    color: @primarylight;
+    margin-bottom: 10px;
+  }
 
   .login-container {
     padding: 15px;
@@ -24,10 +66,6 @@
       letter-spacing: -4px;
       font-size: 36px;
     }
-  }
-
-  .connect-avatar {
-    border-radius: 50%;
   }
 
   a .lead {

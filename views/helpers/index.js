@@ -7,6 +7,15 @@ module.exports = function() {
   var _helpers = {};
 
 
+  _helpers.and = function(a, b, options) {
+    if (a && b) {
+      return options.fn(this);
+    } else {
+      return options.inverse(this);
+    }
+  };
+
+
   // {{#ifeq keyToCheck data.myKey}}
 
   _helpers.ifeq = function(a, b, options) {
