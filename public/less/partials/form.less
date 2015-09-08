@@ -1,4 +1,4 @@
-.login-container {
+.section-container {
   padding: 15px;
   margin-top: 5%;
   margin-left: auto;
@@ -12,6 +12,7 @@
   .box-shadow(0 0px 13px -3px rgba(0,0,0,0.75););
 }
 
+
 .form-container {
   text-align: center;
   margin-top: 40px;
@@ -19,6 +20,19 @@
   margin-left: auto;
   margin-right: auto;
   font-size: 26px;
+
+  .btn-form {
+    background-color: @primarydark;
+    color: @white;
+    height: 50px;
+    text-transform: uppercase;
+    cursor: pointer;
+    .transition(0.3s);
+
+    &:hover {
+      background-color: @primarydark - 20;
+    }
+  }
 
   .flash-message {
     font-size: 12px;

@@ -4689,7 +4689,7 @@ li {
 a {
   text-decoration: none;
 }
-.login-container {
+.section-container {
   padding: 15px;
   margin-top: 5%;
   margin-left: auto;
@@ -4712,6 +4712,19 @@ a {
   margin-left: auto;
   margin-right: auto;
   font-size: 26px;
+}
+.form-container .btn-form {
+  background-color: #174e7a;
+  color: #ffffff;
+  height: 50px;
+  text-transform: uppercase;
+  cursor: pointer;
+  -webkit-transition: 0.3s;
+  -o-transition: 0.3s;
+  transition: 0.3s;
+}
+.form-container .btn-form:hover {
+  background-color: #033a66;
 }
 .form-container .flash-message {
   font-size: 12px;
@@ -4884,7 +4897,7 @@ a {
   color: #00b2e2;
   margin-bottom: 10px;
 }
-.login-container {
+.section-container {
   padding: 15px;
   margin-top: 5%;
   margin-left: auto;
@@ -4935,20 +4948,20 @@ a .lead {
 }
 .twitter-container .fa,
 .facebook-container .fa {
-  -webkit-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-  -webkit-box-shadow: 0px 0px 8px -4px rgba(0, 0, 0, 0.75);
-  box-shadow: 0px 0px 8px -4px rgba(0, 0, 0, 0.75);
   margin-left: auto;
   margin-right: auto;
   background-color: #f5f5f5;
-  border-radius: 3%;
+  border-radius: 9%;
   font-size: 2em;
   height: 40px;
   width: 40px;
   line-height: 40px;
   float: right;
+  -webkit-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  -webkit-box-shadow: 0px 0px 8px -4px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 0px 8px -4px rgba(0, 0, 0, 0.5);
 }
 .login .btn-container {
   margin-top: inherit;
