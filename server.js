@@ -177,7 +177,6 @@ app.get('/login',
 
 app.post('/login',
   passport.authenticate('local', {
-    successRedirect: '/',
     failureRedirect: '/login',
     failureFlash: true,
   }),
@@ -214,13 +213,14 @@ passport.use(new FacebookStrategy(credentials.facebook,
       }
 
       if (user) {
-        // yes => log user in;
-        // This is probably where the user goes straight into the app
+        user.valid = true;
         return done(null, user);
+      }
+      else {
+        return done(null, profile);
       }
     });
 
-  return done(null, profile);
   }
 ));
 
@@ -238,10 +238,23 @@ app.get('/auth/facebook/callback',
         return next(err);
       }
 
-      if (user && req.user.facebook.id) {
-        return res.redirect('/');
+      if (user && user.valid) {
+        console.log('====FACE==');
+        console.log(user);
+        console.log('====FACE==');
+        req.login(user,
+          function(err) {
+            if (err) {
+              return next(err);
+          }
+
+          console.log('===logIn==');
+          console.log(user);
+          console.log('===logIn==');
+          return res.redirect('/');
+        });
       }
-      else if (user && req.user && !req.user.facebook.id) {
+      else if (user && req.user) {
         var attr = user._json;
 
         req.user.facebook = {
