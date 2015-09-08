@@ -9,7 +9,8 @@ var express          = require('express'),
     session          = require('express-session'),
     logger           = require('morgan')('dev'),
     mongoose         = require('mongoose'),
-    passport         = require('passport');
+    passport         = require('passport'),
+    User             = require('./models/User');
 
 //////////////////////
 // INIT
@@ -50,7 +51,6 @@ mongoose.connection.once('open',
 //////////////////////
 // MIDDLEWARE
 //////////////////////
-var User = require('./models/User');
 
 app.use(express.static(init.static));
 app.use(cookieParser());
@@ -103,22 +103,9 @@ passport.use(new LocalStrategy(function(username, password, done) {
         message: 'Unknown user ' + username
       });
     }
-
-    user.comparePassword(password,
-      function(err, isMatch) {
-        if (err) {
-          return done(err);
-        }
-
-        if (isMatch) {
-          return done(null, user);
-        }
-        else {
-          return done(null, false, {
-            message: 'Invalid password'
-          });
-        }
-      });
+    else if (user) {
+      return done(null, user);
+    }
   });
 }));
 
@@ -141,7 +128,7 @@ app.get('/',
   function(req, res, next) {
     console.log('===SECURE==');
     console.log(req.user);
-    console.log('===========');
+    console.log('===SECURE==');
     res.render('app', {
       user: req.user
     });
@@ -149,9 +136,9 @@ app.get('/',
 
 app.get('/register',
   function(req, res, next) {
-    console.log('===========');
+    console.log('==REGISTER=');
     console.log(req.user);
-    console.log('===========');
+    console.log('==REGISTER=');
     res.render('index');
   });
 
@@ -183,11 +170,15 @@ app.post('/register',
 
 app.get('/login',
   function(req, res, next) {
+    console.log('====LOGIN==');
+    console.log(req.user);
+    console.log('====LOGIN==');
     res.render('login');
   });
 
 app.post('/login',
   passport.authenticate('local', {
+    successRedirect: '/',
     failureRedirect: '/login',
     failureFlash: true,
   }),
@@ -220,25 +211,15 @@ passport.use(new FacebookStrategy(credentials.facebook,
     },
     function(err, user) {
       if (err) {
-        console.log('====error====');
-        console.log(err);
-        console.log('===========');
         return done(null, false, err);
       }
 
       if (user) {
-        console.log('======user==');
-        console.log(user);
-        console.log('===========');
+        // yes => log user in;
+        // This is probably where the user goes straight into the app
         return done(null, user);
       }
     });
-
-    console.log('===========');
-    console.log('===profile=');
-    console.log(profile);
-    console.log('===========');
-    console.log('===========');
 
   return done(null, profile);
   }
@@ -258,7 +239,10 @@ app.get('/auth/facebook/callback',
         return next(err);
       }
 
-      if (user && req.user) {
+      if (user && req.user.facebook.id) {
+        return res.redirect('/');
+      }
+      else if (user && req.user && !req.user.facebook.id) {
         var attr = user._json;
 
         req.user.facebook = {
@@ -276,14 +260,12 @@ app.get('/auth/facebook/callback',
             console.log(err);
           }
 
-          res.redirect('/connect');
+          return res.redirect('/connect');
         });
       }
-      else if (user && !req.user) {
-        // User.findOne() { yes => log user in; no => redirect user to register}
-        res.redirect('/register');
+      else if (!req.user) {
+        return res.redirect('/register');
       }
-
     })(req, res, next);
 });
 
